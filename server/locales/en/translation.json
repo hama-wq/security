@@ -1,0 +1,14 @@
+{
+  "select_language": "Select Language",
+  "english": "English",
+  "arabic": "Arabic",
+  "welcome_message": "Welcome to the Security App",
+  "login": "Login",
+  "signup": "Sign Up",
+  "forgot_password": "Forgot Password",
+  "email": "Email",
+  "password": "Password",
+  "full_name": "Full Name",
+  "reset_password": "Reset Password",
+  "reset_email_sent": "Password reset email sent successfully."
+}
