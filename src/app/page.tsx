@@ -1,6 +1,5 @@
-// src/app/page.tsx
-import LoginPage from "./auth/login/page";
+import AuthLanding from "./auth/AuthLanding";
 
 export default function HomePage(): JSX.Element {
-  return <LoginPage />;
+  return <AuthLanding />;
 }

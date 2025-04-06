@@ -1,4 +1,3 @@
-// src/app/auth/signup/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -18,10 +17,8 @@ export default function SignupPage(): JSX.Element {
   const [loading, setLoading] = useState(false);
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // For phone, we use E.164 format (e.g., +9647712331141)
   const isValidPhone = (phone: string) => /^\+?[1-9]\d{1,14}$/.test(phone);
 
-  // Function to check if phone is already registered using our backend API
   const checkPhoneRegistered = async (phone: string) => {
     try {
       const res = await fetch("http://localhost:3002/api/check-phone", {
@@ -30,7 +27,6 @@ export default function SignupPage(): JSX.Element {
         body: JSON.stringify({ phone }),
       });
       const data = await res.json();
-      // If the phone is already registered, the API returns success=false and an error message.
       return data.success;
     } catch (error: any) {
       setErrorMsg(error.message);
@@ -38,7 +34,6 @@ export default function SignupPage(): JSX.Element {
     }
   };
 
-  // Function to send OTP for phone sign up
   const sendOtp = async (phone: string) => {
     try {
       const res = await fetch("http://localhost:3002/api/send-otp", {
@@ -71,7 +66,6 @@ export default function SignupPage(): JSX.Element {
     }
 
     if (isValidEmail(identifier)) {
-      // Sign up using email
       const { error } = await supabase.auth.signUp({ email: identifier, password });
       if (error) {
         setErrorMsg(error.message);
@@ -79,14 +73,12 @@ export default function SignupPage(): JSX.Element {
         router.push("/auth/login");
       }
     } else if (isValidPhone(identifier)) {
-      // First check if the phone is already registered
       const phoneAvailable = await checkPhoneRegistered(identifier);
       if (!phoneAvailable) {
         setErrorMsg("Phone number is already registered.");
         setLoading(false);
         return;
       }
-      // For phone sign up, send OTP if not already sent
       if (!isOtpSent) {
         const sent = await sendOtp(identifier);
         if (sent) {
@@ -99,7 +91,6 @@ export default function SignupPage(): JSX.Element {
           setLoading(false);
           return;
         }
-        // After OTP is (assumed) verified, proceed with phone-based sign up.
         const { error } = await supabase.auth.signUp({ phone: identifier, password });
         if (error) {
           setErrorMsg(error.message);
@@ -114,52 +105,77 @@ export default function SignupPage(): JSX.Element {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">{t("create_account") || "Create Account"}</h2>
-      <form onSubmit={handleSignup} className="space-y-4">
-        <input
-          type="text"
-          placeholder={t("full_name") || "Full Name"}
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="w-full p-2 border rounded bg-gray-800 text-white"
-          required
-        />
-        <input
-          type="text"
-          placeholder={t("email_or_phone") || "Email or Phone Number"}
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-          className="w-full p-2 border rounded bg-gray-800 text-white"
-          required
-        />
-        {isOtpSent && isValidPhone(identifier) && (
-          <input
-            type="text"
-            placeholder={t("enter_otp") || "Enter OTP"}
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className="w-full p-2 border rounded bg-gray-800 text-white"
-            required
-          />
-        )}
-        <input
-          type="password"
-          placeholder={t("password") || "Password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded bg-gray-800 text-white"
-          required
-        />
-        <button
-          type="submit"
-          className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-          disabled={loading}
-        >
-          {loading ? "Creating Account..." : t("signup") || "Sign Up"}
-        </button>
-      </form>
-      {errorMsg && <p className="mt-4 text-red-500 text-center">{errorMsg}</p>}
+    <div className="wrapper">
+      <span className="bg-animate"></span>
+      <span className="bg-animate2"></span>
+
+      <div className="form-box register active">
+        <h2 className="animation" style={{ "--i": 17, "--j": 0 } as React.CSSProperties}>
+          Sign Up
+        </h2>
+        <form onSubmit={handleSignup}>
+          <div className="input-box animation" style={{ "--i": 18, "--j": 1 } as React.CSSProperties}>
+            <input
+              type="text"
+              placeholder={t("full_name") || "Full Name"}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+            <label>{t("full_name") || "Full Name"}</label>
+            <i className="bx bxs-user"></i>
+          </div>
+          <div className="input-box animation" style={{ "--i": 19, "--j": 2 } as React.CSSProperties}>
+            <input
+              type="text"
+              placeholder={t("email_or_phone") || "Email or Phone Number"}
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
+            />
+            <label>{t("email_or_phone") || "Email or Phone Number"}</label>
+            <i className="bx bxs-envelope"></i>
+          </div>
+          {isOtpSent && isValidPhone(identifier) && (
+            <div className="input-box animation" style={{ "--i": 20, "--j": 3 } as React.CSSProperties}>
+              <input
+                type="text"
+                placeholder={t("enter_otp") || "Enter OTP"}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+              <label>{t("enter_otp") || "Enter OTP"}</label>
+            </div>
+          )}
+          <div className="input-box animation" style={{ "--i": 20, "--j": 3 } as React.CSSProperties}>
+            <input
+              type="password"
+              placeholder={t("password") || "Password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <label>{t("password") || "Password"}</label>
+            <i className="bx bxs-lock-alt"></i>
+          </div>
+          <button type="submit" className="btn animation" style={{ "--i": 21, "--j": 4 } as React.CSSProperties} disabled={loading}>
+            {loading ? "Creating Account..." : t("signup") || "Sign Up"}
+          </button>
+          <div className="logreg-link animation" style={{ "--i": 22, "--j": 5 } as React.CSSProperties}>
+            <p>
+              <a href="/auth/login">{t("login") || "Login"}</a>
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <div className="info-text register active">
+        <h2 className="animation" style={{ "--i": 17, "--j": 0 } as React.CSSProperties}>Welcome Back!</h2>
+        <p className="animation" style={{ "--i": 18, "--j": 1 } as React.CSSProperties}>
+          Join us and stay secure online.
+        </p>
+      </div>
     </div>
   );
 }

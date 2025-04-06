@@ -1,4 +1,3 @@
-// src/app/auth/login/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -48,44 +47,64 @@ export default function LoginPage(): JSX.Element {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-lg">
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-blue-600">Be-safe online</h1>
-          <p className="text-lg text-gray-700 mt-2">Log into Be-safe online</p>
-        </div>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="text"
-            placeholder={t("email_or_phone") || "Email or Phone Number"}
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-white"
-            required
-          />
-          <input
-            type="password"
-            placeholder={t("password") || "Password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-white"
-            required
-          />
+    <div className="wrapper">
+      <span className="bg-animate"></span>
+      <span className="bg-animate2"></span>
+
+      <div className="form-box login">
+        <h2 className="animation" style={{ "--i": 0, "--j": 21 } as React.CSSProperties}>
+          Login
+        </h2>
+        <form onSubmit={handleLogin}>
+          <div className="input-box animation" style={{ "--i": 1, "--j": 22 } as React.CSSProperties}>
+            <input
+              type="text"
+              placeholder={t("email_or_phone") || "Email or Phone Number"}
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
+            />
+            <label>{t("email_or_phone") || "Email or Phone Number"}</label>
+            <i className="bx bxs-user"></i>
+          </div>
+          <div className="input-box animation" style={{ "--i": 2, "--j": 23 } as React.CSSProperties}>
+            <input
+              type="password"
+              placeholder={t("password") || "Password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <label>{t("password") || "Password"}</label>
+            <i className="bx bxs-lock-alt"></i>
+          </div>
           {errorMsg && <p className="text-red-500 text-center">{errorMsg}</p>}
-          <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition" disabled={loading}>
+          <button
+            type="submit"
+            className="btn animation"
+            style={{ "--i": 3, "--j": 24 } as React.CSSProperties}
+            disabled={loading}
+          >
             {loading ? "Logging In..." : t("login") || "Log In"}
           </button>
+          <div className="logreg-link animation" style={{ "--i": 4, "--j": 25 } as React.CSSProperties}>
+            <p>
+              <a href="/auth/forgot-password">{t("forgot_password") || "Forgot Password?"}</a>
+            </p>
+            <p>
+              <a href="/auth/signup">{t("create_account") || "Create Account"}</a>
+            </p>
+          </div>
         </form>
-        <div className="mt-4 flex justify-between text-sm">
-          <a href="/auth/forgot-password" className="text-blue-600 hover:underline">
-            {t("forgot_password") || "Forgot Password?"}
-          </a>
-        </div>
-        <div className="mt-4 text-center">
-          <a href="/auth/signup" className="text-green-600 hover:underline">
-            {t("create_account") || "Create Account"}
-          </a>
-        </div>
+      </div>
+
+      <div className="info-text login">
+        <h2 className="animation" style={{ "--i": 0, "--j": 20 } as React.CSSProperties}>
+          Welcome Back!
+        </h2>
+        <p className="animation" style={{ "--i": 1, "--j": 21 } as React.CSSProperties}>
+          Please log in to continue.
+        </p>
       </div>
     </div>
   );
